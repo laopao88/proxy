@@ -11,14 +11,14 @@ import (
 var remoteUrl string
 
 func StartProxy(e *echo.Echo) {
-	sensitiveUrl, err := url.Parse(remoteUrl)
+	remoteProxyUrl, err := url.Parse(remoteUrl)
 	if err != nil {
 	} else {
 		e.Use(middleware.ProxyWithConfig(middleware.ProxyConfig{
 			Skipper: func(c echo.Context) bool {
 				return false
 			},
-			Balancer: middleware.NewRoundRobinBalancer([]*middleware.ProxyTarget{{URL: sensitiveUrl}}),
+			Balancer: middleware.NewRoundRobinBalancer([]*middleware.ProxyTarget{{URL: remoteProxyUrl}}),
 			Rewrite: map[string]string{
 				"/*": "/$1",
 			},
